@@ -20,7 +20,7 @@ public class TransacaoRepository {
 	// Objeto de conexão
 	private Connection conn = null;
 
-	// obtem uma a conexão
+	// obtem uma conexão
 	protected Connection getConexao() {
 		return conn;
 	}
@@ -34,8 +34,7 @@ public class TransacaoRepository {
 	 * Abre uma conexão com o banco de dados 'MYSQL'
 	 * 
 	 * @return os dados da conexão com o banco de dados
-	 * @throws SQLException 
-	 * @throws Exception, se houver erros em abrir conexão com o banco
+	 * @throws BancoDadosException, se houver erros em abrir conexão com o banco
 	 */
 	private void abrirConexao() throws BancoDadosException {
 		try {
@@ -55,7 +54,6 @@ public class TransacaoRepository {
 	 * @throws Exception, se houver ao conectar com o banco
 	 */
 	public void abrirTransacao(Boolean leitura) throws InstrumentoException {
-
 		try {
 			if (conn == null) {
 				abrirConexao();
@@ -67,13 +65,13 @@ public class TransacaoRepository {
 	}
 
 	// Fecha conexão com o banco de dados
-	public void fecharTransacao() {
+	public void fecharTransacao() throws InstrumentoException{
 		try {
 			if (conn != null) {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			// throw new SQLException("Erro ao fechar conexão com o banco.");
+			throw new InstrumentoException("Erro ao fechar conexão com o banco.");
 		}
 	}
 

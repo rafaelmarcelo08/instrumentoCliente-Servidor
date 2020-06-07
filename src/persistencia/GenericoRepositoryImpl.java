@@ -24,15 +24,17 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 	// Obtém o nome da Entidade a ser persistida
 	private Class<T> nomeEntidade;
 
-	// Construtor que inicializa a classe com o nome da Entidade a ser persistida no
-	// atributo
+	/**
+	 * Construtor que inicializa a classe com o nome da Entidade a ser persistida no
+	 * atributo
+	 */
 	@SuppressWarnings("unchecked")
 	public GenericoRepositoryImpl() {
 		this.nomeEntidade = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
 	}
 
-	/*
+	/**
 	 * Metodo para retorna o nome da tabela da Entidade
 	 */
 	public String getNomeTabela() {
@@ -41,8 +43,8 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 
 	// Interface da persistencia
 	protected TransacaoRepository transacaoRepository;
-	
-	/*
+
+	/**
 	 * Implementa uma nova transação a aplicação do projeto
 	 */
 	@Override
@@ -50,7 +52,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 		transacaoRepository = object;
 	}
 
-	/*
+	/**
 	 * obtem uma transação
 	 */
 	@Override
@@ -155,7 +157,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 			sql.append("DELETE FROM ");
 			sql.append(getNomeTabela().toUpperCase());
 			sql.append(montarInstrucaoDelete(id));
-			
+
 			// Mostra instrução SQL no console
 			System.out.println(sql.toString());
 
@@ -236,7 +238,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 					stmt.close();
 					rs.close();
 				} catch (SQLException e) {
-					/*
+					/**
 					 * Lança uma exceção, caso ocorra algum erro no fechamento do Statement
 					 */
 					throw new InstrumentoException("Erro ao fechar conexão com o banco.\n" + e);
@@ -288,7 +290,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 					stmt.close();
 					rs.close();
 				} catch (SQLException e) {
-					/*
+					/**
 					 * Lança uma exceção, caso ocorra algum erro no fechamento do Statement ou do
 					 * ResultSet
 					 */
@@ -315,7 +317,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 			campos.append("(");
 			values.append("(");
 
-			/*
+			/**
 			 * Percorre os campos da entidade e monta a instrução INSERT
 			 */
 			for (Field field : camposEntidade) {
@@ -338,8 +340,8 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 					if (isUsarAspas(field.getType())) {
 						values.append("'");
 
-						// CONSTRUCAO DO DATE
-						if (verificarTipoData(field.getType())) {
+						// Construção da data da aplicação
+						if (isVerificarTipoData(field.getType())) {
 							StringBuilder dataFormatada = new StringBuilder();
 							Object value = field.get(objeto);
 
@@ -385,7 +387,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 
 		try {
 
-			/*
+			/**
 			 * Percorre os campos da entidade e monta a instrução UPDATE
 			 */
 			for (Field field : camposEntidade) {
@@ -402,7 +404,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 						campoValor.append("'");
 
 						// CONSTRUCAO DO DATE
-						if (verificarTipoData(field.getType())) {
+						if (isVerificarTipoData(field.getType())) {
 							StringBuilder dataFormatada = new StringBuilder();
 							Object valorData = field.get(objeto);
 
@@ -454,7 +456,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 
 		try {
 
-			/*
+			/**
 			 * Percorre os campos da entidade e monta a instrução Delete
 			 */
 			for (Field field : camposEntidade) {
@@ -492,7 +494,7 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 		Field[] camposEntidade = nomeEntidade.getDeclaredFields();
 
 		try {
-			/*
+			/**
 			 * Percorre os campos da entidade e monta a instrução SELECT
 			 */
 			for (Field field : camposEntidade) {
@@ -505,7 +507,9 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 				}
 				campos.append(coluna.nomeColuna());
 			}
+
 			sql.append(campos);
+
 			return sql.toString();
 		} catch (Exception e) {
 			throw new Exception("Erro ao montar sql de 'SELECT'.");
@@ -545,8 +549,11 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 		}
 	}
 
-	/*
+	/**
 	 * Verifica os tipos dos campos da Entidade e retona as aspas no comando SQL
+	 * 
+	 * @param tipo
+	 * @return retorna para o programa o tipo da classe
 	 */
 	private Boolean isUsarAspas(Class<?> tipo) {
 		if (tipo == int.class || tipo == long.class || tipo == double.class || tipo == float.class
@@ -557,18 +564,24 @@ public class GenericoRepositoryImpl<T, ID extends Serializable> implements Gener
 		}
 	}
 
-	/*
+	/**
 	 * Verifica se o tipo do campo da Entidade e Date
+	 * 
+	 * @param tipo
+	 * @return retona tipo da Data
 	 */
-	private Boolean verificarTipoData(Class<?> tipo) {
+	private Boolean isVerificarTipoData(Class<?> tipo) {
 		if (tipo == Date.class) {
 			return true;
 		}
 		return false;
 	}
 
-	/*
+	/**
 	 * Monta a data para inserção/alteração no banco de dados
+	 * 
+	 * @param valor
+	 * @return uma data formatada
 	 */
 	private String formatarData(Object valor) {
 		StringBuilder dataFormatada = new StringBuilder();
