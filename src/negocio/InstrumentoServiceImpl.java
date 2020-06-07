@@ -108,7 +108,6 @@ public class InstrumentoServiceImpl implements InstrumentoService {
 
 		// Solicita a 'persistencia' para fechar a conexão
 		getInstrumentoRepository().getTransacaoRepository().fecharTransacao();
-
 	}
 
 	/**
@@ -175,7 +174,7 @@ public class InstrumentoServiceImpl implements InstrumentoService {
 	 *                              InstrumentoException
 	 */
 	private void validarDadosEntidade(Instrumento instrumento) throws InstrumentoException {
-		String regex_email = "^[a-z0-9._-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$";
+		String regex_email = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\\.[a-z]+(\\.[a-z]+)?$";
 		String regex_nome = "[a-zA-Z\\s]+";
 
 		// Validação do nome 'Instrumento'
@@ -185,7 +184,7 @@ public class InstrumentoServiceImpl implements InstrumentoService {
 		}
 
 		// Validação de email 'Instrumento'
-		if (!(instrumento.getEmail().matches(regex_email)) || instrumento.getEmail().length() > 100) {
+		if (!(instrumento.getEmail().matches(regex_email)) || instrumento.getEmail().length() > 50) {
 			throw new InstrumentoException("E-mail inválido.");
 		}
 
