@@ -9,9 +9,6 @@ package util;
 
 public class InstrumentoException extends Exception {
 
-	/**
-	 * COMENTARIO
-	 */
 	private static final long serialVersionUID = -8915071648787268431L;
 
 	private Exception ex;

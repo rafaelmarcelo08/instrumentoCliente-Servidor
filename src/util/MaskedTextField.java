@@ -5,6 +5,8 @@ import javax.swing.text.MaskFormatter;
 import javafx.scene.control.TextField;
 
 /**
+ *  Classe que insere mascara no campo selecionado
+ *  
  * @author Rafael Marcelo
  * @version 1.1
  */
@@ -31,10 +33,11 @@ public class MaskedTextField {
 			System.out.println(ex.getMessage());
 		}
 		mf.setValidCharacters(CaracteresValidos);
-		mf.setValueContainsLiteralCharacters(false);//?
+		mf.setValueContainsLiteralCharacters(false);
 
-		String text = tf.getText().replaceAll("[\\W]", "");
+		String text = tf.getText().replaceAll("\\W", "");
 
+		
 		Boolean repetir = true;
 		while (repetir) {
 

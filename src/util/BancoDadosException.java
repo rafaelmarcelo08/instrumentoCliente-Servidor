@@ -1,5 +1,11 @@
 package util;
 
+/**
+ * Classe que encapsula as exceções da aplicação do 'banco de dados'
+ * 
+ * @author Rafael Marcelo
+ *
+ */
 public class BancoDadosException extends Exception {
 
 	private static final long serialVersionUID = -4835568410468390974L;
