@@ -1,0 +1,14 @@
+DROP TABLE Instrumento;
+
+CREATE TABLE Instrumento (
+	id INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	valor FLOAT  NOT NULL,
+	dataCompra DATE  NOT NULL,
+	quantidadeCompra INT NOT NULL,
+	PRIMARY KEY (id)
+);
+
+SELECT * FROM Instrumento;
+
