@@ -36,7 +36,6 @@ import util.MaskedTextField;
 public class InstrumentoController implements Initializable, Runnable {
 
 	// Declaração das atributos 'constantes'
-	private static final int VALOR_NULO_CAMPO = 0;
 	private static final int TAMANHO_DATA = 8;
 	private static final int TAMANHO_MAXIMO_CAMPO_DATA = 10;
 
@@ -282,25 +281,46 @@ public class InstrumentoController implements Initializable, Runnable {
 		Float valorInstrumento;
 		Integer quantidadeInstrumento;
 
-		instrumento.setNome(txtNome.getText());
-		instrumento.setEmail(txtEmail.getText());
-
-		if (!(txtValor.getText().isEmpty())) {
-			valorInstrumento = Float.parseFloat(txtValor.getText());
-			instrumento.setValor(valorInstrumento);
-
+		if (txtNome.getText().isEmpty()) {
+			throw new InstrumentoException("Nome não pode está vázio.");
 		} else {
-			instrumento.setValor((float) VALOR_NULO_CAMPO);
+			instrumento.setNome(txtNome.getText());
 		}
 
-		if (!(txtQuantidade.getText().isEmpty())) {
-			quantidadeInstrumento = Integer.parseInt(txtQuantidade.getText());
-			instrumento.setQuantidadeCompra(quantidadeInstrumento);
+		if (txtEmail.getText().isEmpty()) {
+			throw new InstrumentoException("E-mail não pode está vázio.");
 		} else {
-			instrumento.setQuantidadeCompra(VALOR_NULO_CAMPO);
+			instrumento.setEmail(txtEmail.getText());
 		}
 
-		instrumento.setDataCompra(formatarData(txtDataCompra.getText()));
+		if (txtValor.getText().isEmpty()) {
+			throw new InstrumentoException("Valor não pode está vázio.");
+		} else {
+			try {
+				valorInstrumento = Float.parseFloat(txtValor.getText());
+				instrumento.setValor(valorInstrumento);
+			} catch (Exception e) {
+				throw new InstrumentoException("Erro ao converter valor.");
+			}
+		}
+
+		if (txtDataCompra.getText().isEmpty()) {
+			throw new InstrumentoException("Data não pode está vázio.");
+		} else {
+			instrumento.setDataCompra(formatarData(txtDataCompra.getText()));
+		}
+
+		if (txtQuantidade.getText().isEmpty()) {
+			throw new InstrumentoException("Quantidade não pode está vázio.");
+
+		} else {
+			try {
+				quantidadeInstrumento = Integer.parseInt(txtQuantidade.getText());
+				instrumento.setQuantidadeCompra(quantidadeInstrumento);
+			} catch (Exception e) {
+				throw new InstrumentoException("Erro ao converter quantidade.");
+			}
+		}
 
 		return instrumento;
 	}

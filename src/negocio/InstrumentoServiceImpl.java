@@ -121,7 +121,7 @@ public class InstrumentoServiceImpl implements InstrumentoService {
 	@Override
 	public Instrumento consultar(Integer id) throws InstrumentoException {
 		Instrumento instrumento;
-		
+
 		// Solicita a 'Persistencia' a criação de um objeto para acessar o banco.
 		gerenciarConexaoRepository();
 
@@ -178,8 +178,7 @@ public class InstrumentoServiceImpl implements InstrumentoService {
 		String regex_nome = "[a-zA-Z\\s]+";
 
 		// Validação do nome 'Instrumento'
-		if (instrumento.getNome().isEmpty() || instrumento.getNome().length() > 50
-				|| !(instrumento.getNome().matches(regex_nome))) {
+		if (instrumento.getNome().length() > 50 || !(instrumento.getNome().matches(regex_nome))) {
 			throw new InstrumentoException("Nome do instrumento inválido.");
 		}
 
