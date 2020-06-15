@@ -15,7 +15,7 @@
    <children>
       <Pane layoutY="3.0" prefHeight="777.0" prefWidth="799.0">
          <children>
-            <Button fx:id="btnIncluir" layoutX="194.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Incluir">
+            <Button fx:id="btnIncluir" layoutX="227.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Incluir">
                <font>
                   <Font size="13.0" />
                </font>
@@ -52,29 +52,31 @@
             </Label>
             <TextField fx:id="txtNome" layoutX="151.0" layoutY="179.0" prefHeight="25.0" prefWidth="235.0" />
             <TextField fx:id="txtEmail" layoutX="151.0" layoutY="225.0" prefHeight="25.0" prefWidth="235.0" />
-            <TableView fx:id="tvLista" layoutX="14.0" layoutY="450.0" prefHeight="317.0" prefWidth="774.0">
+            <TableView fx:id="tvLista" editable="true" layoutX="14.0" layoutY="450.0" prefHeight="317.0" prefWidth="774.0">
               <columns>
-                <TableColumn fx:id="idCol" prefWidth="51.0" text="ID" />
-                <TableColumn fx:id="nomeCol" prefWidth="173.0" text="Nome" />
-                  <TableColumn fx:id="emailCol" minWidth="0.0" prefWidth="223.0" text="E-mail" />
-                  <TableColumn fx:id="valorCol" prefWidth="124.0" text="Valor" />
-                  <TableColumn fx:id="dataCompraCol" prefWidth="118.0" text="Data Compra" />
-                  <TableColumn fx:id="quantidadeCol" prefWidth="83.0" text="Quantidade" />
+                <TableColumn fx:id="idCol" prefWidth="59.0" text="ID" />
+                <TableColumn fx:id="nomeCol" prefWidth="164.0" text="Nome" />
+                  <TableColumn fx:id="emailCol" minWidth="0.0" prefWidth="202.0" text="E-mail" />
+                  <TableColumn fx:id="dataCompraCol" prefWidth="119.0" text="Data Compra" />
+                  <TableColumn fx:id="valorCol" prefWidth="86.0" text="Valor" />
+                  <TableColumn fx:id="quantidadeCol" prefWidth="143.0" text="Quantidade" />
               </columns>
             </TableView>
             <TextField fx:id="txtValor" layoutX="151.0" layoutY="270.0" prefHeight="25.0" prefWidth="149.0" />
             <TextField fx:id="txtDataCompra" layoutX="151.0" layoutY="316.0" />
             <TextField fx:id="txtQuantidade" layoutX="151.0" layoutY="359.0" />
-            <Button fx:id="btnExcluir" disable="true" layoutX="410.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Deletar" />
-            <Label layoutX="114.0" layoutY="127.0" text="ID:" />
-            <TextField fx:id="txtIdInclusao" editable="false" layoutX="151.0" layoutY="123.0" prefHeight="25.0" prefWidth="76.0" />
-            <Button fx:id="btnAlterar" disable="true" layoutX="298.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Alterar" />
+            <Button fx:id="btnExcluir" layoutX="420.0" layoutY="403.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Deletar" />
+            <Label layoutX="539.0" layoutY="410.0" text="ID:" />
+            <TextField fx:id="txtId" editable="false" layoutX="151.0" layoutY="123.0" prefHeight="25.0" prefWidth="76.0" />
+            <Button fx:id="btnAlterar" layoutX="326.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Alterar" />
             <ImageView fitHeight="276.0" fitWidth="312.0" layoutX="437.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/guitar.png" />
                </image>
             </ImageView>
-            <Button fx:id="btnCancelar" layoutX="516.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Cancelar tudo " />
+            <Button fx:id="btnBuscarId" layoutX="700.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Buscar" />
+            <TextField fx:id="txtBuscarId" layoutX="573.0" layoutY="406.0" prefHeight="25.0" prefWidth="114.0" />
+            <Label layoutX="106.0" layoutY="127.0" text="ID:" />
          </children>
       </Pane>
    </children>

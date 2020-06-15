@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
-
 import entidade.Instrumento;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +27,7 @@ import util.InstrumentoException;
 import util.MaskedTextField;
 
 /**
- * Classe que controla as requisoções do cliente Cliente-Servidor
+ * Classe que controla as requisições do cliente Cliente-Servidor
  * 
  * @author Rafael Marcelo
  *
@@ -69,9 +68,15 @@ public class InstrumentoController implements Initializable, Runnable {
 
 	@FXML
 	private Button btnExcluir;
+	
+    @FXML
+    private Button btnBuscarId;
 
-	@FXML
-	private TextField txtIdInclusao;
+    @FXML
+    private TextField txtBuscarId;
+    
+    @FXML
+    private TextField txtId;
 
 	@FXML
 	private TextField txtNome;
@@ -88,13 +93,9 @@ public class InstrumentoController implements Initializable, Runnable {
 	@FXML
 	private TextField txtQuantidade;
 
-	@FXML
-	private Button btnCancelar;
-
 	/* Declaração dos atibutos globais da classe */
 	ArrayList<Instrumento> todosInstrumentos = new ArrayList<>();
 	InstrumentoServiceImpl service = new InstrumentoServiceImpl();
-	Instrumento instrumento = new Instrumento();
 
 	/**
 	 * Declaração das referencias da tableView
@@ -122,13 +123,10 @@ public class InstrumentoController implements Initializable, Runnable {
 		/* Inicialização da listagem dos dados */
 		run();
 
-		
 		/* Botoões de 'CRUD' da aplicação */
 
-		
-		// Ação de quando o botão 'Incluir' e selecioado
+		/* Ação de quando o botão 'Incluir' e selecioado */
 		btnIncluir.setOnAction(event -> {
-
 			try {
 				service.incluir(preencherInstrumento());
 				limparCampos();
@@ -139,49 +137,28 @@ public class InstrumentoController implements Initializable, Runnable {
 			}
 		});
 
-		// Ação de quando o botão 'Alterar' e selecioado
-		btnAlterar.setOnAction(event -> {
-			Instrumento instrumentoAlterado = new Instrumento();
-			try {
-				instrumentoAlterado = preencherInstrumento();
-				instrumentoAlterado.setId(converterId(txtIdInclusao.getText()));
-				service.alterar(instrumentoAlterado);
-				limparCampos();
-
-				run();
-				alertarUsuario("Instrumento alterado.");
-
-				gerenciarBotoes();
-
-			} catch (InstrumentoException e) {
-				alertarUsuario(e.getMsg());
-			}
-		});
-
-		// Ação de quando o botão 'Excluir' e selecioado
+		/* Ação de quando o botão 'Excluir' e selecioado */
 		btnExcluir.setOnAction(event -> {
-			Integer id;
+			Instrumento instrumento = new Instrumento();
 
 			try {
+				instrumento = buscarLinhaSelecionada();
 
-				id = converterId(txtIdInclusao.getText());
-
-				service.excluir(id);
-
-				limparCampos();
-
+				if (instrumento == null) {
+					throw new InstrumentoException("Instrumento não selecionado.");
+				} else {
+					/* Exclui o objeto selecionado do banco de dados */
+					service.excluir(instrumento.getId());
+				}
 				run();
-				alertarUsuario("Instrumento excluído.");
-				gerenciarBotoes();
-
 			} catch (InstrumentoException e) {
 				alertarUsuario(e.getMsg());
 			}
 		});
 
-		// Ações que auxilia a area de texto e auxilia os botões.
+		/* Ações que auxilia a area de texto e auxilia os botões. */
 
-		// Observador do campo de data, o mesmo formata a data no padrão BR
+		/* Observador do campo de data, o mesmo formata a data no padrão BR */
 		txtDataCompra.setOnKeyReleased(event -> {
 			String dataCampoString;
 
@@ -195,18 +172,31 @@ public class InstrumentoController implements Initializable, Runnable {
 				mask.setTf(txtDataCompra);
 				mask.setFormatter();
 				mask.limitarTamanhoCampo(TAMANHO_MAXIMO_CAMPO_DATA);
-
 			}
 		});
 
-		// Limpa todos os campos, habilita/desabilita os campos da visão
-		btnCancelar.setOnAction(event -> {
-			btnIncluir.setDisable(false);
-			btnAlterar.setDisable(true);
-			btnExcluir.setDisable(true);
+		/* Eventos de click na tableview */
+		tvLista.setOnMouseClicked(event -> {
+			Instrumento instrumento = new Instrumento();
+			instrumento = buscarLinhaSelecionada();
+			preencherVisaoEntidade(instrumento);
+		});
 
-			limparCampos();
-			run();
+		
+		// -----------------------------------------------------------------------------------------
+
+		/* Ação de quando o botão 'Alterar' e selecioado */
+		btnAlterar.setOnAction(event -> {
+			Instrumento instrumento = new Instrumento();
+			try {
+
+				service.alterar(instrumento);
+
+				limparCampos();
+				run();
+			} catch (InstrumentoException e) {
+				alertarUsuario(e.getMsg());
+			}
 		});
 	}
 
@@ -247,7 +237,7 @@ public class InstrumentoController implements Initializable, Runnable {
 		if (txtDataCompra.getText().isEmpty()) {
 			throw new InstrumentoException("Data não pode está vázio.");
 		} else {
-			instrumento.setDataCompra(formatarData(txtDataCompra.getText()));
+			instrumento.setDataCompra(formatarDataTipoDate(txtDataCompra.getText()));
 		}
 
 		if (txtQuantidade.getText().isEmpty()) {
@@ -272,7 +262,7 @@ public class InstrumentoController implements Initializable, Runnable {
 	 * @return Date
 	 * @throws InstrumentoException, caso exista algum erro ao preencher instrumento
 	 */
-	private Date formatarData(String data) throws InstrumentoException {
+	private Date formatarDataTipoDate(String data) throws InstrumentoException {
 		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 		Date dataFormatada;
 
@@ -286,44 +276,26 @@ public class InstrumentoController implements Initializable, Runnable {
 	}
 
 	/**
-	 * Método que auxília preencher a visão com os dados do banco de dados
-	 * 
-	 * @throws InstrumentoException, caso exista algum erro ao preencher instrumento
+	 * Metodo que auxilia na formatacao da data da table view
 	 */
-	private void preencherAVisao() throws InstrumentoException {
-		StringBuilder idInclusaoString = new StringBuilder();
-		StringBuilder valorstring = new StringBuilder();
-		StringBuilder dataString = new StringBuilder();
-		StringBuilder quantidadeString = new StringBuilder();
+	private void formatarDataTableView() {
+		dataCompraCol.setCellFactory(cell -> {
+			return new TableCell<Instrumento, Date>() {
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
-		try {
-			idInclusaoString.append(String.valueOf(instrumento.getId()));
-			valorstring.append(String.valueOf(instrumento.getValor()));
-			quantidadeString.append(String.valueOf(instrumento.getQuantidadeCompra()));
-			dataString.append(formatarDataVisao());
+				@Override
+				protected void updateItem(Date item, boolean empty) {
+					super.updateItem(item, empty);
 
-			txtIdInclusao.setText(idInclusaoString.toString());
-			txtNome.setText(instrumento.getNome());
-			txtEmail.setText(instrumento.getEmail());
-			txtValor.setText(valorstring.toString());
-			txtQuantidade.setText(quantidadeString.toString());
-			txtDataCompra.setText(dataString.toString());
-		} catch (Exception e) {
-			throw new InstrumentoException("Erro ao preencher a visão.");
-		}
-	}
-
-	/**
-	 * Método que auxília formatar a data na visão
-	 * 
-	 * @return retorna uma data formatada
-	 */
-	public String formatarDataVisao() {
-		StringBuilder dataFormatada = new StringBuilder();
-
-		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-		dataFormatada.append(formato.format(instrumento.getDataCompra()));
-		return dataFormatada.toString();
+					if (!empty) {
+						setText(format.format(item));
+					} else {
+						setText("");
+						setGraphic(null);
+					}
+				}
+			};
+		});
 	}
 
 	/**
@@ -339,28 +311,6 @@ public class InstrumentoController implements Initializable, Runnable {
 		} catch (Exception e) {
 			throw new InstrumentoException("Erro ao converter id.");
 		}
-	}
-
-	/**
-	 * Método que auxília em limpar os campos da visão
-	 */
-	private void limparCampos() {
-		txtIdInclusao.setText("");
-		txtNome.setText("");
-		txtEmail.setText("");
-		txtValor.setText("");
-		txtDataCompra.setText("");
-		txtQuantidade.setText("");
-	}
-
-	/**
-	 * Método que auxília no gerenciamento dos botões
-	 */
-	private void gerenciarBotoes() {
-
-		btnAlterar.setDisable(true);
-		btnExcluir.setDisable(true);
-		btnIncluir.setDisable(false);
 	}
 
 	/**
@@ -398,23 +348,46 @@ public class InstrumentoController implements Initializable, Runnable {
 		}
 	}
 
-	private void formatarDataTableView() {
-		dataCompraCol.setCellFactory(cell -> {
-			return new TableCell<Instrumento, Date>() {
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	/**
+	 * Método que retorna instrumento selecionado na tableview
+	 * 
+	 * @return Retorna instrumento preenchido
+	 */
+	private Instrumento buscarLinhaSelecionada() {
+		ObservableList<Instrumento> linhaSelecionada;
+		Instrumento instrumento = new Instrumento();
 
-				@Override
-				protected void updateItem(Date item, boolean empty) {
-					super.updateItem(item, empty);
+		/* Devolve a linha selecionada */
+		linhaSelecionada = tvLista.getSelectionModel().getSelectedItems();
 
-					if (!empty) {
-						setText(format.format(item));
-					} else {
-						setText("");
-						setGraphic(null);
-					}
-				}
-			};
-		});
+		/* Insiro a linha selecionada no modelo */
+		instrumento = linhaSelecionada.get(0);
+		return instrumento;
+	}
+
+	/**
+	 * Método que auxília em limpar os campos da visão
+	 */
+	private void limparCampos() {
+		txtId.setText("");
+		txtNome.setText("");
+		txtEmail.setText("");
+		txtValor.setText("");
+		txtDataCompra.setText("");
+		txtQuantidade.setText("");
+	}
+
+	/**
+	 * Método que preenche a visão qunado e selecionado um item na tableview
+	 * 
+	 * @param instrumento
+	 */
+	private void preencherVisaoEntidade(Instrumento instrumento) {
+		txtId.setText(instrumento.getId().toString());
+		txtNome.setText(instrumento.getNome().toString());
+		txtEmail.setText(instrumento.getEmail().toString());
+		txtValor.setText(instrumento.getValor().toString());
+		txtDataCompra.setText(instrumento.getDataCompra().toString());
+		txtQuantidade.setText(instrumento.getQuantidadeCompra().toString());
 	}
 }

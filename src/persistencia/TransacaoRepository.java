@@ -33,7 +33,6 @@ public class TransacaoRepository {
 	/**
 	 * Abre uma conexão com o banco de dados 'MYSQL'
 	 * 
-	 * @return os dados da conexão com o banco de dados
 	 * @throws BancoDadosException, se houver erros em abrir conexão com o banco
 	 */
 	private void abrirConexao() throws BancoDadosException {
@@ -49,9 +48,7 @@ public class TransacaoRepository {
 	 * Abrir conexão com o banco de dados
 	 * 
 	 * @param leitura, verifica se e leitura ou escrita no banco.
-	 * @return os dados conectado com o banco de dados
-	 * @throws BancoDadosException 
-	 * @throws Exception, se houver ao conectar com o banco
+	 * @throws BancoDadosException, se houver ao conectar com o banco
 	 */
 	public void abrirTransacao(Boolean leitura) throws InstrumentoException {
 		try {
