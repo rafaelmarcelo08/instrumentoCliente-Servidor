@@ -15,7 +15,7 @@
    <children>
       <Pane layoutY="3.0" prefHeight="777.0" prefWidth="799.0">
          <children>
-            <Button fx:id="btnIncluir" layoutX="227.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Incluir">
+            <Button fx:id="btnSalvarAlterar" layoutX="242.0" layoutY="403.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Salvar">
                <font>
                   <Font size="13.0" />
                </font>
@@ -65,10 +65,10 @@
             <TextField fx:id="txtValor" layoutX="151.0" layoutY="270.0" prefHeight="25.0" prefWidth="149.0" />
             <TextField fx:id="txtDataCompra" layoutX="151.0" layoutY="316.0" />
             <TextField fx:id="txtQuantidade" layoutX="151.0" layoutY="359.0" />
-            <Button fx:id="btnExcluir" layoutX="420.0" layoutY="403.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Deletar" />
+            <Button fx:id="btnExcluir" layoutX="337.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Deletar" />
             <Label layoutX="539.0" layoutY="410.0" text="ID:" />
             <TextField fx:id="txtId" editable="false" layoutX="151.0" layoutY="123.0" prefHeight="25.0" prefWidth="76.0" />
-            <Button fx:id="btnAlterar" layoutX="326.0" layoutY="402.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Alterar" />
+            <Button fx:id="btnCancelar" layoutX="430.0" layoutY="403.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Cancelar" />
             <ImageView fitHeight="276.0" fitWidth="312.0" layoutX="437.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../image/guitar.png" />
