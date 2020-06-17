@@ -33,7 +33,7 @@ import util.MaskedTextField;
  *
  */
 public class InstrumentoController implements Initializable, Runnable {
-	
+
 	/* Declaração das atributos 'constantes' */
 	private static final int TAMANHO_DATA = 8;
 	private static final int TAMANHO_MAXIMO_CAMPO_DATA = 10;
@@ -160,9 +160,9 @@ public class InstrumentoController implements Initializable, Runnable {
 				} else {
 					/* Exclui o objeto selecionado do banco de dados */
 					service.excluir(instrumento.getId());
+					btnSalvarAlterar.setText("Salvar");
 				}
-				
-				btnSalvarAlterar.setText("Salvar");
+
 				limparCampos();
 				run();
 			} catch (InstrumentoException e) {
@@ -170,35 +170,24 @@ public class InstrumentoController implements Initializable, Runnable {
 			}
 		});
 
-		// -----------------------------------------------------------------------------------------
-
-		/* Ação que cancela a operação para o usuário */
-		btnCancelar.setOnAction(event -> {
-			btnSalvarAlterar.setText("Salvar");
-			limparCampos();
-			run();
-			// PRECISA LIMPAR O CAMPO BUSCAR ID
-		});
-		
+		/* Busca um objeto no banco e coloca na tabela */
 		btnBuscarId.setOnAction(event -> {
 			Integer id;
-			
+
 			try {
 				id = converterId(txtBuscarId.getText());
-				
+
 				todosInstrumentos.clear();
-				System.out.println("RETORNO: " + service.consultar(id).toString());
 				todosInstrumentos.add(service.consultar(id));
-				System.out.println("LISTA: " + todosInstrumentos);
-				listarInstrumento();
+
+				tvLista.setItems(listarInstrumento());
+
 			} catch (InstrumentoException e) {
 				alertarUsuario(e.getMsg());
+			} finally {
+				limparCampos();
 			}
 		});
-		
-		
-		
-		// -----------------------------------------------------------------------------------------
 
 		/* Ações que auxilia a area de texto e auxilia os botões. */
 
@@ -223,8 +212,18 @@ public class InstrumentoController implements Initializable, Runnable {
 		tvLista.setOnMouseClicked(event -> {
 			Instrumento instrumento = new Instrumento();
 			instrumento = buscarLinhaSelecionada();
-			preencherVisaoEntidade(instrumento);
-			btnSalvarAlterar.setText("Alterar");
+
+			if (instrumento != null) {
+				preencherVisaoEntidade(instrumento);
+				btnSalvarAlterar.setText("Alterar");
+			}
+		});
+
+		/* Ação que cancela a operação para o usuário */
+		btnCancelar.setOnAction(event -> {
+			btnSalvarAlterar.setText("Salvar");
+			limparCampos();
+			run();
 		});
 	}
 
@@ -405,6 +404,7 @@ public class InstrumentoController implements Initializable, Runnable {
 	 * Método que auxília em limpar os campos da visão
 	 */
 	private void limparCampos() {
+		txtBuscarId.setText("");
 		txtId.setText("");
 		txtNome.setText("");
 		txtEmail.setText("");
