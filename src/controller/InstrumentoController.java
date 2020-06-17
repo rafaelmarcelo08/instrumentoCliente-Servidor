@@ -33,10 +33,11 @@ import util.MaskedTextField;
  *
  */
 public class InstrumentoController implements Initializable, Runnable {
-
+	
 	/* Declaração das atributos 'constantes' */
 	private static final int TAMANHO_DATA = 8;
 	private static final int TAMANHO_MAXIMO_CAMPO_DATA = 10;
+	private static final int VALOR_NULO = 0;
 
 	/* Declaração das referencias dos icones da visão */
 	@FXML
@@ -61,22 +62,22 @@ public class InstrumentoController implements Initializable, Runnable {
 	private TableColumn<Instrumento, Integer> quantidadeCol;
 
 	@FXML
-	private Button btnIncluir;
-
-	@FXML
-	private Button btnAlterar;
+	private Button btnSalvarAlterar;
 
 	@FXML
 	private Button btnExcluir;
-	
-    @FXML
-    private Button btnBuscarId;
 
-    @FXML
-    private TextField txtBuscarId;
-    
-    @FXML
-    private TextField txtId;
+	@FXML
+	private Button btnBuscarId;
+
+	@FXML
+	private Button btnCancelar;
+
+	@FXML
+	private TextField txtBuscarId;
+
+	@FXML
+	private TextField txtId;
 
 	@FXML
 	private TextField txtNome;
@@ -125,13 +126,23 @@ public class InstrumentoController implements Initializable, Runnable {
 
 		/* Botoões de 'CRUD' da aplicação */
 
-		/* Ação de quando o botão 'Incluir' e selecioado */
-		btnIncluir.setOnAction(event -> {
+		/* Ação de quando o botão 'Salvar e Alterar' e selecioado */
+		btnSalvarAlterar.setOnAction(event -> {
+			Instrumento instrumento = new Instrumento();
 			try {
-				service.incluir(preencherInstrumento());
+				instrumento = preencherInstrumento();
+
+				if (instrumento.getId() == VALOR_NULO) {
+					service.incluir(preencherInstrumento());
+					alertarUsuario("Instrumento incluído.");
+				} else {
+					service.alterar(preencherInstrumento());
+					alertarUsuario("Instrumento alterado.");
+					btnSalvarAlterar.setText("Salvar");
+				}
+
 				limparCampos();
 				run();
-				alertarUsuario("Instrumento incluído.");
 			} catch (InstrumentoException e) {
 				alertarUsuario(e.getMsg());
 			}
@@ -150,11 +161,44 @@ public class InstrumentoController implements Initializable, Runnable {
 					/* Exclui o objeto selecionado do banco de dados */
 					service.excluir(instrumento.getId());
 				}
+				
+				btnSalvarAlterar.setText("Salvar");
+				limparCampos();
 				run();
 			} catch (InstrumentoException e) {
 				alertarUsuario(e.getMsg());
 			}
 		});
+
+		// -----------------------------------------------------------------------------------------
+
+		/* Ação que cancela a operação para o usuário */
+		btnCancelar.setOnAction(event -> {
+			btnSalvarAlterar.setText("Salvar");
+			limparCampos();
+			run();
+			// PRECISA LIMPAR O CAMPO BUSCAR ID
+		});
+		
+		btnBuscarId.setOnAction(event -> {
+			Integer id;
+			
+			try {
+				id = converterId(txtBuscarId.getText());
+				
+				todosInstrumentos.clear();
+				System.out.println("RETORNO: " + service.consultar(id).toString());
+				todosInstrumentos.add(service.consultar(id));
+				System.out.println("LISTA: " + todosInstrumentos);
+				listarInstrumento();
+			} catch (InstrumentoException e) {
+				alertarUsuario(e.getMsg());
+			}
+		});
+		
+		
+		
+		// -----------------------------------------------------------------------------------------
 
 		/* Ações que auxilia a area de texto e auxilia os botões. */
 
@@ -180,23 +224,7 @@ public class InstrumentoController implements Initializable, Runnable {
 			Instrumento instrumento = new Instrumento();
 			instrumento = buscarLinhaSelecionada();
 			preencherVisaoEntidade(instrumento);
-		});
-
-		
-		// -----------------------------------------------------------------------------------------
-
-		/* Ação de quando o botão 'Alterar' e selecioado */
-		btnAlterar.setOnAction(event -> {
-			Instrumento instrumento = new Instrumento();
-			try {
-
-				service.alterar(instrumento);
-
-				limparCampos();
-				run();
-			} catch (InstrumentoException e) {
-				alertarUsuario(e.getMsg());
-			}
+			btnSalvarAlterar.setText("Alterar");
 		});
 	}
 
@@ -210,6 +238,14 @@ public class InstrumentoController implements Initializable, Runnable {
 		Instrumento instrumento = new Instrumento();
 		Float valorInstrumento;
 		Integer quantidadeInstrumento;
+		Integer id;
+
+		if (txtId.getText().isEmpty()) {
+			instrumento.setId(VALOR_NULO);
+		} else {
+			id = Integer.parseInt(txtId.getText());
+			instrumento.setId(id);
+		}
 
 		if (txtNome.getText().isEmpty()) {
 			throw new InstrumentoException("Nome não pode está vázio.");
@@ -331,7 +367,7 @@ public class InstrumentoController implements Initializable, Runnable {
 	 * 
 	 * @return lista de objetos para setar na table view
 	 */
-	private ObservableList<Instrumento> listaInstrumentos() {
+	private ObservableList<Instrumento> listarInstrumento() {
 		return FXCollections.observableArrayList(todosInstrumentos);
 	}
 
@@ -342,7 +378,7 @@ public class InstrumentoController implements Initializable, Runnable {
 	public void run() {
 		try {
 			todosInstrumentos = (ArrayList<Instrumento>) service.listar();
-			tvLista.setItems(listaInstrumentos());
+			tvLista.setItems(listarInstrumento());
 		} catch (InstrumentoException e) {
 			alertarUsuario(e.getMsg());
 		}
@@ -387,7 +423,18 @@ public class InstrumentoController implements Initializable, Runnable {
 		txtNome.setText(instrumento.getNome().toString());
 		txtEmail.setText(instrumento.getEmail().toString());
 		txtValor.setText(instrumento.getValor().toString());
-		txtDataCompra.setText(instrumento.getDataCompra().toString());
+		txtDataCompra.setText(formatarDataCampoVisao(instrumento.getDataCompra()));
 		txtQuantidade.setText(instrumento.getQuantidadeCompra().toString());
+	}
+
+	/**
+	 * Método que formata a data do tipo Date para o padão Br
+	 * 
+	 * @param data
+	 * @return data formatada
+	 */
+	private String formatarDataCampoVisao(Date data) {
+		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		return formato.format(data);
 	}
 }
