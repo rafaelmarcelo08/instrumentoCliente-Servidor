@@ -2,7 +2,7 @@
 ## Projeto desenvolvido com JavaFx
 <p>
   O projeto foi desenvolvido com o objetivo de inserir, alterar, consultar, listar e deletar um instrumento musical do banco de dados.
-  O mesmo foi desenvolvido usando a tecnologia JavaFx na interface e a linguagem Java no BackEnd. No projeto foi utilizado o padrão de projeto MVC.
+  No projeto foi utilizado o padrão de projeto MVC.
 </p>
 <p>
   O banco de dados utilizado nesta aplicação foi o MySQL, na criação do mesmo foi utilizado o software XAMPP para deixar o banco Online.
