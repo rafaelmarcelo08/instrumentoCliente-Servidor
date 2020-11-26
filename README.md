@@ -1,38 +1,48 @@
 # instrumentoCliente-Servidor
 ## Projeto desenvolvido com JavaFx
-<p>
-  O projeto foi desenvolvido com o objetivo de inserir, alterar, consultar, listar e deletar um instrumento musical do banco de dados.
-  No projeto foi utilizado o padrão de projeto MVC.
-</p>
-<p>
-  O banco de dados utilizado nesta aplicação foi o MySQL, na criação do mesmo foi utilizado o software XAMPP para deixar o banco Online.
-</p>
 
-<strong>Como funciona:</strong>
+## 💻 Sobre o projeto
 
-<p>
-  Para realizar a execução do projeto é necessário ter instalado na máquina uma IDE e um JDK.
+O projeto foi desenvolvido com o objetivo de inserir, alterar, consultar, listar e deletar um instrumento musical do banco de dados. No projeto foi utilizado o padrão de projeto MVC
 
-  Para obter o projeto, basta executar o seguinte comando no git:
+O banco de dados utilizado nesta aplicação foi o MySQL, na criação do mesmo foi utilizado o software XAMPP para deixar o banco Online
 
-  $ git clone https://github.com/rafaelmarcelo08/instrumentoCliente-Servidor.git
+Os usuários terão acesso as seguintes funcionalidades:
+- Inserir
+- Deletar
+- Atualizar
+- Listar
 
-  Ou realizar o download do projeto.
-</p>
-<p>
-  Para deixa o banco de dados online é necessário instalar o XAMPP na máquina.
+O usuarário poderá realizar o CRUD completo dentro do aplicativo eguintes funcionalidades.
+
+## 🛠 Tecnologias
+
+As seguintes ferramentas foram usadas na construção do projeto:
+
+- Java
+- JavaFX
+
+## 🚀 Como executar o projeto
+
+```bash
+# Clone este repositório:
+$ git clone https://github.com/rafaelmarcelo08/instrumentoCliente-Servidor.git
+
+# É necessário:
+Para realizar a execução do projeto é necessário ter instalado na máquina uma IDE e um JDK.
+
+# Para deixa o banco de dados online é necessário instalar o XAMPP na máquina.
+Segue o link a baixo, caso não tenha:
+XAMPP:	 https://www.apachefriends.org/pt_br/index.html
+Cria um banco de dados chamado:<strong>instrumentoBD</strong>
+
+# Foi utilizado o HeidiSQL para o gerenciamento do banco de dados.
+HeidiSQL:	https://www.heidisql.com/download.php
+```
+Após a criação do mesmo, utiliza os comandos que estão dentro do projeto na pasta ‘sql’ para a criação da tabela no banco de dados.
   
-  Segue o link a baixo, caso não tenha:
-  
-  XAMPP:	 https://www.apachefriends.org/pt_br/index.html
-  
-  Foi utilizado o HeidiSQL para o gerenciamento do banco de dados.
-  
-  HeidiSQL:	https://www.heidisql.com/download.php
-  
-  Cria um banco de dados chamado:<strong>instrumentoBD</strong>
-  
-  Após a criação do mesmo, utiliza os comandos que estão dentro do projeto na pasta ‘sql’ para a criação da tabela no banco de dados.
-  
-  Após estes procedimentos basta realizar a importação do projeto para uma IDE e executar o projeto posteriormente.
-</p>
+Após estes procedimentos basta realizar a importação do projeto para uma IDE e executar o projeto posteriormente.
+
+## 📝 Licença
+
+Este projeto esta sobe a licença Rafael Marcelo
