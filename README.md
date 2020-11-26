@@ -34,7 +34,7 @@ Para realizar a execução do projeto é necessário ter instalado na máquina u
 # Para deixa o banco de dados online é necessário instalar o XAMPP na máquina.
 Segue o link a baixo, caso não tenha:
 XAMPP:	 https://www.apachefriends.org/pt_br/index.html
-Cria um banco de dados chamado:<strong>instrumentoBD</strong>
+Cria um banco de dados chamado:instrumentoBD
 
 # Foi utilizado o HeidiSQL para o gerenciamento do banco de dados.
 HeidiSQL:	https://www.heidisql.com/download.php
@@ -45,4 +45,4 @@ Após estes procedimentos basta realizar a importação do projeto para uma IDE 
 
 ## 📝 Licença
 
-Este projeto esta sobe a licença Rafael Marcelo
+Este projeto está sobe a licença Rafael Marcelo
