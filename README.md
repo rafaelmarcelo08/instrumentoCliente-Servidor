@@ -13,7 +13,7 @@ Os usuários terão acesso as seguintes funcionalidades:
 - Atualizar
 - Listar
 
-O usuarário poderá realizar o CRUD completo dentro do aplicativo eguintes funcionalidades.
+O usuarário poderá realizar o CRUD completo dentro do aplicativo.
 
 ## 🛠 Tecnologias
 
